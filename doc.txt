@@ -1,0 +1,34 @@
+# โครงสร้าง
+  devDependencies
+    คือ tool package ที่ใช้เฉพาะตอน development
+    - webpack : bundle file
+    # npm install webpack --save-dev 
+    - barbel : transpile to ES5
+
+  Dependencies ไม่ต้องมีคำว่า --save 
+    ใช้กับ code ใน project เรา เช่น react ใช้ตอน web run อยุ่
+
+  package สามารถไป run install dependencies อัตโนมัติได้ โดยต้องมี package.jason ในโฟลเดอร์แล้วพิมพ์ npm install ก็จะได้ node-module ทั้งโฟลเดอร์
+
+  วิธีลบ (uninstall)
+    # npm uninstall (package name)
+
+  Global install package
+    # npm install live-server --global
+
+# Webpack รวม js, css, jpg to static folder
+  # production mode reduce file bundle size
+
+  # development mode
+
+
+
+# package.jason
+  - script คือ run npm แล้วจะเรียก webpack ขึ้นมา แล้วจะทำการ export output
+  # npm run dev
+
+  - webpack-cli มีเพื่อ interface command line
+
+
+. current folder
+.. parent folder
