@@ -17,9 +17,30 @@
     # npm install live-server --global
 
 # Webpack รวม js, css, jpg to static folder
-  # production mode reduce file bundle size
+  entry point output loader plugin
 
-  # development mode
+  webpack.config.js
+  - path: path.resolve(__dirname, 'dist'), คือปลายทาง ที่จะมีไฟล์ js, html, css บรรจุอยู่
+  - production mode reduce file bundle size
+  - development mode
+
+  -plug in 
+    # npm install webpack-plugin เพื่อ config html file
+      จะสร้างไฟล์ html อัตโนมัติ 
+      *** ใหม่
+      https://webpack.js.org/plugins/html-webpack-plugin/
+
+  -webpack-cli
+    - start : จะ run background ตอน dev  --open คือเปิด page อัตโนมัติ จะ runserver อัตโนมัติ
+    - dev
+    - build = 
+
+  -webpack-dev-server เอาไว้ run ตอน develop auto reload page
+    - contentBase : คือ webpack serve file ตอนเซฟ
+
+  -babel / loaders คือให้จัดการบางไฟล์ที่เราต้องการ เช่น ES6 > ES5 หรือ SCSS เป็น CSS
+
+# src = source code ที่เราจะ dev, dist = distribute คือ folder ปลายทาง
 
 
 
@@ -32,3 +53,26 @@
 
 . current folder
 .. parent folder
+
+
+// Import export
+
+- EXPORT 
+export const add = (a, b) => a + b;
+
+- IMPORT 
+import str from './models/Search';
+// import { add, multiply, ID } from './views/searchView';
+// import { add as a, multiply as m, ID as id } from './views/searchView';
+import * as searchView from './views/searchView';
+console.log(str);
+
+// console.log(`Using imported function ${add(ID, 2)} and ${multiply(3, 5)}`);
+// console.log(`Using imported function ${a(id, 2)} and ${m(3, 5)}`);
+
+console.log(
+  `Using imported function ${searchView.add(
+    searchView.ID,
+    2
+  )} and ${searchView.multiply(3, 5)}`
+);
