@@ -6,7 +6,8 @@ export default class Search {
   }
 
   async getResults() {
-    const key = 'd0d01f65f7d300d9cdff9615ac5b23b7';
+    const key = '49db83b283d19527309388dfea7ac684';
+    // const key = 'd0d01f65f7d300d9cdff9615ac5b23b7';
 
     try {
       const res = await axios(
