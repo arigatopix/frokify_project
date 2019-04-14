@@ -105,6 +105,9 @@ const renderButtons = (page, numResults, resultPerPage) => {
   } else if (page === pages && pages > 1) {
     // Only button to go to prev page
     button = createButton(page, 'prev');
+  } else {
+    // กรณี pages มีแค่หน้าเดียว
+    button = '';
   }
 
   // insert to html page

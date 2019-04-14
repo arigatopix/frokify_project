@@ -1,5 +1,6 @@
 import Search from './models/Search';
 // ไม่มี { Search } เพราะ export default
+import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
@@ -15,9 +16,15 @@ const state = {
  * -Liked recipes
  */
 
+/**
+ * SEARCH RECIPE
+ */
+
 const controlSearch = async () => {
   // * 1. Get query from view รับค่าจาก UI (searchView)
-  const query = searchView.getInput();
+  // const query = searchView.getInput();
+  // ! TESTING
+  const query = 'pizza';
   // อย่าลืม (); เพื่อเรียก function
 
   if (query) {
@@ -29,19 +36,37 @@ const controlSearch = async () => {
     searchView.clearResult();
     renderLoader(elements.searchResponse);
 
-    // * 4. Search for recipes (fetch from models)
-    await state.search.getResults();
-    // ใส่ await เพราะว่าข้อ 5 ดึงข้อมูลออกมา จะดึงออกมาเฉยๆ ไม่ได้ (เอา this.result มาแสดง)
+    try {
+      // * 4. Search for recipes (fetch from models)
+      await state.search.getResults();
+      // ใส่ await เพราะว่าข้อ 5 ดึงข้อมูลออกมา จะดึงออกมาเฉยๆ ไม่ได้ (เอา this.result มาแสดง)
 
-    // * 5. Render result from UI (result มาจาก Search this result)
-    // clear spinner หลังจากได้ข้อมูลมาแล้ว
-    clearLoader();
-    // show list (init เป็น page 1)
-    searchView.renderResult(state.search.result);
+      // * 5. Render result from UI (result มาจาก Search this result)
+      // clear spinner หลังจากได้ข้อมูลมาแล้ว
+      clearLoader();
+      // show list (init เป็น page 1)
+      searchView.renderResult(state.search.result);
+    } catch (error) {
+      console.log('Somthing wrong with the search..');
+      clearLoader();
+    }
   }
 };
 
+// ! TESTING
+window.addEventListener('load', e => {
+  controlSearch();
+
+  e.preventDefault();
+});
+
 // Event Listener
+elements.searchForm.addEventListener('submit', e => {
+  // call state after search submit
+  controlSearch();
+
+  e.preventDefault();
+});
 elements.searchForm.addEventListener('submit', e => {
   // call state after search submit
   controlSearch();
@@ -65,3 +90,50 @@ elements.searchResultPages.addEventListener('click', e => {
     searchView.renderResult(state.search.result, goToPage);
   }
 });
+
+/**
+ * * RECIPE CONTROLLER
+ */
+
+//  hashchange : ถ้าเรากดที่ recipe แล้วให้ url เปลี่ยนตามที่เรากด แล้วรับค่ามาแสดงใน page
+
+const controlRecipe = async () => {
+  // Get id from url
+  const id = window.location.hash.replace('#', '');
+  // ! เก็บข้อมูล url .hash คือเอาหลัง # มาเก็บ
+
+  if (id) {
+    // Prepare UI for changes
+
+    // Create new recipe object
+    state.recipe = new Recipe(id);
+
+    // ! TESTING
+    window.r = state.recipe;
+
+    try {
+      // กรณี id ไม่ถูก ให้แจ้งเตือน
+
+      // Get recipe data
+      await state.recipe.getRecipe();
+
+      // Calculate servings and time
+      state.recipe.calcTime();
+      state.recipe.calcServings();
+
+      // Render recipe
+      console.log(state.recipe);
+    } catch (error) {
+      alert('Error processing recipe!');
+    }
+  }
+};
+
+// * Event listener กรณีมีการเปลี่ยนแปลงที่หน้า browser
+// window.addEventListener('hashchange', controlRecipe); // ! event 'hashchange' เมื่อกดโดน url ที่มี  # เปลี่ยนไปจากเดิม
+// window.addEventListener('load', controlRecipe); // เมื่อ window มีการ reload แต่ url เหมือนเดิม ให้แสดง recipe อันเดิม
+
+// * Function เดียวกัน แต่คนละ event all in one line
+['load', 'hashchange'].forEach(event =>
+  window.addEventListener(event, controlRecipe)
+);
