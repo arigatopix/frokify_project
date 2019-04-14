@@ -17,14 +17,12 @@ const state = {
  */
 
 /**
- * SEARCH RECIPE
+ * ! SEARCH CONTROLLER
  */
 
 const controlSearch = async () => {
   // * 1. Get query from view รับค่าจาก UI (searchView)
-  // const query = searchView.getInput();
-  // ! TESTING
-  const query = 'pizza';
+  const query = searchView.getInput();
   // อย่าลืม (); เพื่อเรียก function
 
   if (query) {
@@ -52,13 +50,6 @@ const controlSearch = async () => {
     }
   }
 };
-
-// ! TESTING
-window.addEventListener('load', e => {
-  controlSearch();
-
-  e.preventDefault();
-});
 
 // Event Listener
 elements.searchForm.addEventListener('submit', e => {
@@ -92,7 +83,7 @@ elements.searchResultPages.addEventListener('click', e => {
 });
 
 /**
- * * RECIPE CONTROLLER
+ * ! RECIPE CONTROLLER
  */
 
 //  hashchange : ถ้าเรากดที่ recipe แล้วให้ url เปลี่ยนตามที่เรากด แล้วรับค่ามาแสดงใน page
@@ -108,14 +99,10 @@ const controlRecipe = async () => {
     // Create new recipe object
     state.recipe = new Recipe(id);
 
-    // ! TESTING
-    window.r = state.recipe;
-
     try {
-      // กรณี id ไม่ถูก ให้แจ้งเตือน
-
-      // Get recipe data
+      // Get recipe data and parse ingredients
       await state.recipe.getRecipe();
+      state.recipe.parseIngredients();
 
       // Calculate servings and time
       state.recipe.calcTime();

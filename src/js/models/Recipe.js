@@ -52,6 +52,7 @@ export default class Recipe {
     ]; // array ที่จะค้นหา
 
     const unitShort = [
+      // ผลลัพธ์จากการแปลงหน่วย
       'tbsp',
       'tbsp',
       'oz',
@@ -73,11 +74,58 @@ export default class Recipe {
       });
 
       // 2) Remove parenthese ใช้ Regular Expression (อะไรที่มีวงเล็บถูกแทนที่ด้วย '')
-      ingredient = ingredient.replace(/ *\([^)]*\) */g, ' ');
+      ingredient = ingredient.replace(/ *\([^)]*\) */g, ' '); //ตัดคำในวงเล็บออกทั้งหมด เช็ค *( ข้างหน้าเว้นวรรคตามด้วยวงเล็บเปิด  )* [^)] คือยกเว้น อะไรก็ได้ที่ไม่ใช่วงเล็บปิด
+      // ingredient = 4 1/2 tbsp sugar .. เป็นต้น
 
-      // 3) Parse ingredients into count, unit and ingredient
+      // 3) Parse ingredients into count, unit and ingredient ทำให้โปรแกรมรู้ว่าตัวเลขอะไร หน่วยอะไร
+      const arrIng = ingredient.split(' ');
+      const unitIndex = arrIng.findIndex(el2 => unitShort.includes(el2));
+      // ! จดและทบทวน
+      // * findIndex() ค้นหาแบบ loop ตาม callback function ได้ index ถ้าหาไม่เจอตอบ -1 *
+      // * includes() จะเช็ค el2 เทียบกับ array unitShort ตอบว่า true หรือ false
 
-      return ingredient;
+      // * เปลี่ยน arrIng เป็น object ที่บรรจุ จำนวน หน่วย และ ingredient
+      let objInt;
+      if (unitIndex > -1) {
+        // There is a unit
+        // EX. 4 1/2 cups, arrCount = [4, 1/2]
+        // EX. 4 cups, arrCount = [4]
+        const arrCount = arrIng.slice(0, unitIndex); // ได้ array เฉพาะส่วนที่เป็นตัวเลข
+
+        let count;
+        if (arrCount.length === 1) {
+          // กรณี 1-1/2 tbsp หรือเป็น 1 tbsp เฉยๆ
+          count = eval(arrIng[0].replace('-', '+'));
+        } else {
+          // กรณี 4 1/2 cups ใช้ eval() methods ในการรวม ดูของ brad section ES6 จะ eval('1+2') === eval(3)
+          count = eval(arrIng.slice(0, unitIndex).join('+')); // สุดท้าย eval("4+1/2"); --> 4.5
+        }
+
+        objInt = {
+          count,
+          unit: arrIng[unitIndex],
+          ingredient: arrIng.slice(unitIndex + 1).join(' ')
+        };
+      } else if (parseInt(arrIng[0], 10)) {
+        // There is NO unit, but 1st element is number
+        // เช่น 1 potatos เชคตำแหน่งแรก แล้วเช็คว่าเป็นฐาน 10 (base) รึเปล่า parseInt(x, base) ตอบเป็นตัวเลขกับ NaN
+
+        objInt = {
+          count: parseInt(arrIng[0], 10),
+          unit: '',
+          ingredient: arrIng.slice(1).join(' ') // 2 whole egg ก็จะตัดเลข 2 ออก แล้วรวมประโยคจาก arr
+        };
+      } else if (unitIndex === -1) {
+        // There is NO unit NO number in 1st position
+
+        objInt = {
+          count: 1, // ให้ถือว่าเป็น 1 หน่วย
+          unit: '', // ปล่อยว่าง
+          ingredient // เท่ากับ ingredient : ingredient
+        };
+      }
+
+      return objInt;
     });
     this.ingredients = newIngredientsUnits;
   }
