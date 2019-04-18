@@ -2,6 +2,7 @@ import Search from './models/Search';
 // ไม่มี { Search } เพราะ export default
 import Recipe from './models/Recipe';
 import * as searchView from './views/searchView';
+import * as recipeView from './views/recipeView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 const state = {
@@ -94,7 +95,12 @@ const controlRecipe = async () => {
   // ! เก็บข้อมูล url .hash คือเอาหลัง # มาเก็บ
 
   if (id) {
+    // Clear Recipe อันที่โหลดไว้ก่อนหน้านี้
+    recipeView.clearRecipe();
+
     // Prepare UI for changes
+    // ! จำว่ามันมายังไง reuseable code
+    renderLoader(elements.recipe);
 
     // Create new recipe object
     state.recipe = new Recipe(id);
@@ -109,7 +115,8 @@ const controlRecipe = async () => {
       state.recipe.calcServings();
 
       // Render recipe
-      console.log(state.recipe);
+      clearLoader();
+      recipeView.renderRecipe(state.recipe);
     } catch (error) {
       alert('Error processing recipe!');
     }

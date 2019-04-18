@@ -35,7 +35,7 @@ export default class Recipe {
 
   calcServings() {
     // จะปรับทีหลัง
-    this.serving = 4;
+    this.servings = 4;
   }
 
   parseIngredients() {
@@ -63,6 +63,9 @@ export default class Recipe {
       'pound'
     ];
 
+    // Array unit สำหรับหน่วยอื่นๆ ที่ไม่ต้องการแปลงให้สั้น แต่ต้องการให้แสดงผล
+    const units = [...unitShort, 'kg', 'g'];
+
     // เปลี่ยนแปลงหน่วย
     const newIngredientsUnits = this.ingredients.map(el => {
       // 1) Uniform units แปลง units ทุกอันให้เป็นตามโปรแกรมของเรา จาก long เป็น short
@@ -70,7 +73,7 @@ export default class Recipe {
 
       unitLong.forEach((unit, index) => {
         // จะได้เป็นทีละบรรทัด
-        ingredient = ingredient.replace(unit, unitShort[index]);
+        ingredient = ingredient.replace(unit, units[index]);
       });
 
       // 2) Remove parenthese ใช้ Regular Expression (อะไรที่มีวงเล็บถูกแทนที่ด้วย '')
@@ -79,10 +82,14 @@ export default class Recipe {
 
       // 3) Parse ingredients into count, unit and ingredient ทำให้โปรแกรมรู้ว่าตัวเลขอะไร หน่วยอะไร
       const arrIng = ingredient.split(' ');
-      const unitIndex = arrIng.findIndex(el2 => unitShort.includes(el2));
+      const unitIndex = arrIng.findIndex(el2 => units.includes(el2));
       // ! จดและทบทวน
       // * findIndex() ค้นหาแบบ loop ตาม callback function ได้ index ถ้าหาไม่เจอตอบ -1 *
       // * includes() จะเช็ค el2 เทียบกับ array unitShort ตอบว่า true หรือ false
+      // * eval() ใน brad
+      // * slice()
+      // * split()
+      // * replace()
 
       // * เปลี่ยน arrIng เป็น object ที่บรรจุ จำนวน หน่วย และ ingredient
       let objInt;
