@@ -160,6 +160,10 @@ const controlList = () => {
   });
 };
 
+/**
+ * ! LIKE CONTROLLER
+ */
+
 //  Handle delete and update list item events
 elements.shopping.addEventListener('click', e => {
   // ! จำ กรณีจะลบ แล้ว return ค่า id closest() method (กดโดนอะไรจะ return ตัวมันเอง) มาคู่กับ  dataset
