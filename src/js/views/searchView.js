@@ -13,6 +13,18 @@ export const clearResult = () => {
   elements.searchResultPages.innerHTML = '';
 };
 
+// * Hilight When select recipe
+export const hilightSelected = id => {
+  // remove class อันที่เคยเลือกออกไป เพื่อให้ hilight อันเดียว
+  // ! ลบอย่างงี้ก็ได้หรอ
+  const resultArr = Array.from(document.querySelectorAll('.results__link'));
+  resultArr.forEach(el => {
+    el.classList.remove('results__link--active')
+  });
+
+  document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+}
+
 // * Search Recipes
 // limit Result title ให้ชื่อ title ไม่เกินคำที่เรากำหนด
 const limitRecipeTitle = (title, limit = 17) => {

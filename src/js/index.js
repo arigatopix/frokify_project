@@ -59,12 +59,7 @@ elements.searchForm.addEventListener('submit', e => {
 
   e.preventDefault();
 });
-elements.searchForm.addEventListener('submit', e => {
-  // call state after search submit
-  controlSearch();
 
-  e.preventDefault();
-});
 
 elements.searchResultPages.addEventListener('click', e => {
   // ต้องการให้กดตรงไหนของปุ่ม ก้ต้องโดนปุ่ม
@@ -101,6 +96,9 @@ const controlRecipe = async () => {
     // Prepare UI for changes
     // ! จำว่ามันมายังไง reuseable code
     renderLoader(elements.recipe);
+
+    // Hilight selected search item
+    if(state.search) searchView.hilightSelected(id);
 
     // Create new recipe object
     state.recipe = new Recipe(id);
