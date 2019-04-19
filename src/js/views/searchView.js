@@ -19,11 +19,13 @@ export const hilightSelected = id => {
   // ! ลบอย่างงี้ก็ได้หรอ
   const resultArr = Array.from(document.querySelectorAll('.results__link'));
   resultArr.forEach(el => {
-    el.classList.remove('results__link--active')
+    el.classList.remove('results__link--active');
   });
 
-  document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
-}
+  document
+    .querySelector(`a[href="#${id}"]`)
+    .classList.add('results__link--active');
+};
 
 // * Search Recipes
 // limit Result title ให้ชื่อ title ไม่เกินคำที่เรากำหนด
@@ -133,7 +135,6 @@ export const renderResult = (recipes, page = 1, resultPerPage = 10) => {
   // ใช้กับ slice end จะไม่รวมสมาชิกตัวสุดท้าย page 1  จะได้ slice(0,10) หน้าสองจะได้สมาชิกไม่เกิน 20
 
   // render page
-  // ! slice() method
   recipes.slice(start, end).forEach(renderRecipe);
   // รับค่า api จาก controller แล้วมา render
   // เรียกผ่าน function ซึ่งไม่ต้องแทนด้วย arrow function (el => {do somthing(el)}) แต่ใส่ function เข้าไปเลย

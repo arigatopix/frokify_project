@@ -24,6 +24,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
     "axios": "^0.18.0",
-    "fraction.js": "^4.0.12"
+    "fraction.js": "^4.0.12",
+    "uniqid": "^5.0.3"
   }
 }

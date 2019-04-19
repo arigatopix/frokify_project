@@ -1,13 +1,18 @@
 import Search from './models/Search';
 // ไม่มี { Search } เพราะ export default
 import Recipe from './models/Recipe';
+import List from './models/List';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
+import * as listView from './views/listView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 const state = {
   // init state
 };
+
+//! TEST
+window.state = state;
 
 /**** Global state of the app ไฟล์นี้ทำหน้าที่เป็น controller ของ app
  * คล้ายๆ react สร้าง controller เก็บ state
@@ -137,6 +142,46 @@ const controlRecipe = async () => {
   window.addEventListener(event, controlRecipe)
 );
 
+/**
+ * ! LIST CONTROLLER
+ */
+const controlList = () => {
+  // Create a new list IF there in none yet
+  if (!state.list) state.list = new List();
+
+  // Add each ingredient to the list
+  state.recipe.ingredients.forEach(el => {
+    // recipe นึงมีหลายๆ ingredients เป็น array อยู่
+    const item = state.list.addItem(el.count, el.unit, el.ingredient);
+
+    // Render item by UI
+    listView.renderItem(item);
+    // ? ทำไมไม่ loop ใน listView  เหมือนกับ searchView คำตอบคือ แล้วแต่จะชอบ
+  });
+};
+
+//  Handle delete and update list item events
+elements.shopping.addEventListener('click', e => {
+  // ! จำ กรณีจะลบ แล้ว return ค่า id closest() method (กดโดนอะไรจะ return ตัวมันเอง) มาคู่กับ  dataset
+  const id = e.target.closest('.shopping__item').dataset.itemid;
+
+  // Handle the delete button
+  if (e.target.matches('.shopping__delete, .shopping__delete *')) {
+    // ! ใช้ matches() จะ return true/false
+    // Delete from state
+    state.list.deleteItem(id);
+
+    //  Delete from UI
+    listView.deleteItem(id);
+
+    // Handle the count update
+  } else if (e.target.matches('.shopping__count-value')) {
+    // READ from UI and UPDATE state count value
+    const val = parseFloat(e.target.value);
+    state.list.updateCount(id, val);
+  }
+});
+
 // * Handling recipe button decrese, increse servings
 elements.recipe.addEventListener('click', e => {
   if (e.target.matches('.btn-decrese, .btn-decrese *')) {
@@ -152,5 +197,11 @@ elements.recipe.addEventListener('click', e => {
     // Increse button is clicked
     state.recipe.updateServings('inc');
     recipeView.updateServingsIngredients(state.recipe);
+  } else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
+    // เลือกทั้งกดทีปุ่่ม และกดที่ child
+    controlList();
   }
 });
+
+// ! วิธี test ใน google chrome
+// window.l = new List();
