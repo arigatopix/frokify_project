@@ -46,12 +46,12 @@ export const renderRecipe = recipe => {
             <span class="recipe__info-text"> servings</span>
 
             <div class="recipe__info-buttons">
-                <button class="btn-tiny">
+                <button class="btn-tiny btn-decrese">
                     <svg>
                         <use href="img/icons.svg#icon-circle-with-minus"></use>
                     </svg>
                 </button>
-                <button class="btn-tiny">
+                <button class="btn-tiny btn-increse">
                     <svg>
                         <use href="img/icons.svg#icon-circle-with-plus"></use>
                     </svg>
@@ -100,3 +100,16 @@ export const renderRecipe = recipe => {
   // ? NOTE
   // ${recipe.ingredients.map(el => createIngredient(el)).join('')}  ต้องการเป็น markup string ไม่ใช่ array เลยใส่ join
 };
+
+
+// Update Servings and Ingredients
+export const updateServingsIngredients = recipe => {
+  // Update servings
+  document.querySelector('.recipe__info-data--people').textContent = recipe.servings;
+  
+  // Update Ingredients
+  const countElements = Array.from(document.querySelectorAll('.recipe__count'));
+  countElements.forEach((el, i) => {
+    el.textContent = recipe.ingredients[i].count;
+  });
+}

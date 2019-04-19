@@ -136,4 +136,20 @@ export default class Recipe {
     });
     this.ingredients = newIngredientsUnits;
   }
+
+  updateServings (type) {
+    // type === 'dec', 'inc' รับจากปุ่มเพื่อบอกว่าเพิ่มหรือลด
+
+    // Servings
+    const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1;
+
+    // Ingredients
+    this.ingredients.forEach(ing => {
+      // ing = ingredient object เอา count เดิมมาเปลี่ยนใหม่
+      ing.count *= (newServings / this.servings); 
+      // เอา count เดิม คูณด้วย (newServings/this.servings) ซึ่งปกจิจะเป็น 1
+    });
+
+    this.servings = newServings;
+  }
 }

@@ -60,7 +60,6 @@ elements.searchForm.addEventListener('submit', e => {
   e.preventDefault();
 });
 
-
 elements.searchResultPages.addEventListener('click', e => {
   // ต้องการให้กดตรงไหนของปุ่ม ก้ต้องโดนปุ่ม
   // คล้ายๆ กดปุ่ม x เท่านั้นถึงจะลบ แล้วค่อยลบ parent อะไรแบบนี้
@@ -129,3 +128,21 @@ const controlRecipe = async () => {
 ['load', 'hashchange'].forEach(event =>
   window.addEventListener(event, controlRecipe)
 );
+
+// * Handling recipe button decrese, increse servings
+elements.recipe.addEventListener('click', e => {
+  if (e.target.matches('.btn-decrese, .btn-decrese *')) {
+    // ! ใช้ matches() method จะตอบกลับเป็น boolean , btn-decrese * (ดอกจันทร์) คือถ้ากดโดน child element ของ btn-decrese จะตอบ true 
+    // จริงๆ recipe คือทั้งหน้าเพจเลย แล้วใช้ event delegation
+    if (state.recipe.servings > 1) {
+      // Decrese button is clicked
+      state.recipe.updateServings('dec'); // รับ type ไปคำนวณ
+      // Show UI
+      recipeView.updateServingsIngredients(state.recipe);
+    }
+  } else if (e.target.matches('.btn-increse, .btn-increse *')) {
+    // Increse button is clicked
+    state.recipe.updateServings('inc');
+    recipeView.updateServingsIngredients(state.recipe);
+  }
+});
