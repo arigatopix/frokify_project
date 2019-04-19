@@ -138,7 +138,7 @@ export default class Recipe {
     this.ingredients = newIngredientsUnits;
   }
 
-  updateServings (type) {
+  updateServings(type) {
     // type === 'dec', 'inc' รับจากปุ่มเพื่อบอกว่าเพิ่มหรือลด
 
     // Servings
@@ -147,7 +147,7 @@ export default class Recipe {
     // Ingredients
     this.ingredients.forEach(ing => {
       // ing = ingredient object เอา count เดิมมาเปลี่ยนใหม่
-      ing.count *= (newServings / this.servings); 
+      ing.count *= newServings / this.servings;
       // เอา count เดิม คูณด้วย (newServings/this.servings) ซึ่งปกจิจะเป็น 1
     });
 
