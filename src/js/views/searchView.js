@@ -133,6 +133,7 @@ export const renderResult = (recipes, page = 1, resultPerPage = 10) => {
   // ใช้กับ slice end จะไม่รวมสมาชิกตัวสุดท้าย page 1  จะได้ slice(0,10) หน้าสองจะได้สมาชิกไม่เกิน 20
 
   // render page
+  // ! slice() method
   recipes.slice(start, end).forEach(renderRecipe);
   // รับค่า api จาก controller แล้วมา render
   // เรียกผ่าน function ซึ่งไม่ต้องแทนด้วย arrow function (el => {do somthing(el)}) แต่ใส่ function เข้าไปเลย

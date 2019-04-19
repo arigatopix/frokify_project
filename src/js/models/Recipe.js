@@ -86,9 +86,10 @@ export default class Recipe {
       // ! จดและทบทวน
       // * findIndex() ค้นหาแบบ loop ตาม callback function ได้ index ถ้าหาไม่เจอตอบ -1 *
       // * includes() จะเช็ค el2 เทียบกับ array unitShort ตอบว่า true หรือ false
-      // * eval() ใน brad
-      // * slice()
-      // * split()
+      // * eval() string method
+      // * split() string to new array
+      // * slice() new array by select start to end
+      // * splice() add, replace, remove
       // * replace()
 
       // * เปลี่ยน arrIng เป็น object ที่บรรจุ จำนวน หน่วย และ ingredient

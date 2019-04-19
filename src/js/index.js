@@ -40,9 +40,10 @@ const controlSearch = async () => {
       await state.search.getResults();
       // ใส่ await เพราะว่าข้อ 5 ดึงข้อมูลออกมา จะดึงออกมาเฉยๆ ไม่ได้ (เอา this.result มาแสดง)
 
-      // * 5. Render result from UI (result มาจาก Search this result)
+      // * 5. Render result from UI (result มาจาก Search this result ส่งมาจาก Search Models)
       // clear spinner หลังจากได้ข้อมูลมาแล้ว
       clearLoader();
+      console.log(state.search);
       // show list (init เป็น page 1)
       searchView.renderResult(state.search.result);
     } catch (error) {
@@ -52,7 +53,8 @@ const controlSearch = async () => {
   }
 };
 
-// Event Listener
+// * Event Listener
+// ปุ่ม Search Submin
 elements.searchForm.addEventListener('submit', e => {
   // call state after search submit
   controlSearch();
@@ -60,11 +62,13 @@ elements.searchForm.addEventListener('submit', e => {
   e.preventDefault();
 });
 
+// ปุ่ม Resualt per Page 
 elements.searchResultPages.addEventListener('click', e => {
   // ต้องการให้กดตรงไหนของปุ่ม ก้ต้องโดนปุ่ม
   // คล้ายๆ กดปุ่ม x เท่านั้นถึงจะลบ แล้วค่อยลบ parent อะไรแบบนี้
-  // ! ใช้ closet() method returns the closest ancestor (บรรพบุรุษ) of the current element หรือตัวมันเอง กดตรงไหนก็จะส่งแต่ tag button
+  // ใช้ closet() method returns the closest ancestor (บรรพบุรุษ) of the current element หรือตัวมันเอง กดตรงไหนก็จะส่งแต่ tag button
   const btn = e.target.closest('.btn-inline');
+  console.log(btn)
 
   if (btn) {
     const goToPage = parseInt(btn.dataset.goto); // ! ใช้ data-goto attribute จะส่งกลับมาเป็น string แต่เราจะเอา goToPage ไปใช้ใน function ต้อง converse เป็นตัวเลข (parseInt แสดงใน log ตัวหนังสือสีน้ำเงิน)
@@ -76,6 +80,8 @@ elements.searchResultPages.addEventListener('click', e => {
     searchView.renderResult(state.search.result, goToPage);
   }
 });
+
+// -----------------------------------------------------------------------------------------------
 
 /**
  * ! RECIPE CONTROLLER
@@ -97,7 +103,7 @@ const controlRecipe = async () => {
     renderLoader(elements.recipe);
 
     // Hilight selected search item
-    if(state.search) searchView.hilightSelected(id);
+    if(state.search) { searchView.hilightSelected(id) }
 
     // Create new recipe object
     state.recipe = new Recipe(id);
@@ -132,7 +138,7 @@ const controlRecipe = async () => {
 // * Handling recipe button decrese, increse servings
 elements.recipe.addEventListener('click', e => {
   if (e.target.matches('.btn-decrese, .btn-decrese *')) {
-    // ! ใช้ matches() method จะตอบกลับเป็น boolean , btn-decrese * (ดอกจันทร์) คือถ้ากดโดน child element ของ btn-decrese จะตอบ true 
+    // ใช้ matches() method จะตอบกลับเป็น boolean , btn-decrese * (ดอกจันทร์) คือถ้ากดโดน child element ของ btn-decrese จะตอบ true 
     // จริงๆ recipe คือทั้งหน้าเพจเลย แล้วใช้ event delegation
     if (state.recipe.servings > 1) {
       // Decrese button is clicked
