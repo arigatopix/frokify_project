@@ -6,6 +6,10 @@ export default class Likes {
   addLike(id, title, author, img) {
     const like = { id, title, author, img };
     this.likes.push(like);
+
+    // Persist Data in localStorage เช็คจาก this.likes array
+    this.persistData();
+
     return like;
   }
 
@@ -14,6 +18,9 @@ export default class Likes {
 
     // Delete items from original array
     this.likes.splice(index, 1);
+
+    // Persist Data in localStorage
+    this.persistData();
   }
 
   isLiked(id) {
@@ -22,5 +29,17 @@ export default class Likes {
 
   getNumLikes() {
     return this.likes.length;
+  }
+
+  // implement localstorage
+  persistData() {
+    localStorage.setItem('likes', JSON.stringify(this.likes));
+  }
+
+  readStorage() {
+    const storage = JSON.parse(localStorage.getItem('likes'));
+
+    // Restoring กรณีมี likes ใน localStorage ให้ set เข้า object
+    if (storage) this.likes = storage;
   }
 }

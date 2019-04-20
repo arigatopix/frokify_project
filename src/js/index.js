@@ -13,7 +13,7 @@ const state = {
   // init state
 };
 
-//! TEST
+//! TEST *** จำให้แม่น ว่าเอาไปใช้ได้ยังไง กรณี app ซับซ้อนมากๆ
 window.state = state;
 
 /**** Global state of the app ไฟล์นี้ทำหน้าที่เป็น controller ของ app
@@ -87,8 +87,6 @@ elements.searchResultPages.addEventListener('click', e => {
     searchView.renderResult(state.search.result, goToPage);
   }
 });
-
-// ------------------------------------------------------------------------------
 
 /**
  * ! RECIPE CONTROLLER
@@ -167,9 +165,6 @@ const controlList = () => {
  * ! LIKE CONTROLLER
  */
 
-//  ! TESTING เพื่อให้ renderRecipe เห็น like
-state.likes = new Likes();
-
 const controlLike = () => {
   // Init likes state
   if (!state.likes) state.likes = new Likes();
@@ -190,7 +185,7 @@ const controlLike = () => {
 
     // Add like to UI list
     likesView.renderLike(newLike);
-    console.log(state.likes);
+    // console.log(state.likes);
 
     // * User HAS liked current recipe
   } else {
@@ -202,10 +197,26 @@ const controlLike = () => {
 
     // Remove like from UI list
     likesView.deleteLike(currentID);
-    console.log(state.likes);
+    // console.log(state.likes);
   }
   likesView.toggleLikeMenu(state.likes.getNumLikes());
 };
+
+// * Restore liked recipes on page load
+window.addEventListener('load', () => {
+  // Init likes state
+  state.likes = new Likes();
+
+  // Restore likes from localStorage
+  state.likes.readStorage();
+
+  // Toggle like menu button (แสดงหรือไม่แสดงหัวใจ)
+  likesView.toggleLikeMenu(state.likes.getNumLikes());
+
+  // Render the existing likes (render ใน list)
+  state.likes.likes.forEach(like => likesView.renderLike(like));
+  // state.likes คือ object state.likes.likes คือ property ใน object Likes.js
+});
 
 //  Handle delete and update list item events
 elements.shopping.addEventListener('click', e => {
