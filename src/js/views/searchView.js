@@ -23,13 +23,14 @@ export const hilightSelected = id => {
   });
 
   document
-    .querySelector(`a[href="#${id}"]`)
+    .querySelector(`.results__link[href*="${id}"]`)
     .classList.add('results__link--active');
+  // a[href*="${id}"] คือ select all of link
 };
 
 // * Search Recipes
 // limit Result title ให้ชื่อ title ไม่เกินคำที่เรากำหนด
-const limitRecipeTitle = (title, limit = 17) => {
+export const limitRecipeTitle = (title, limit = 17) => {
   const newTitle = [];
   // เอา string title มาตัดเป็นคำๆ แล้วสร้าง string ใหม่ ไม่เกินที่เรา limit ไว้
 

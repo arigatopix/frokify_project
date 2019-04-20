@@ -15,7 +15,9 @@ export default class Search {
       this.result = res.data.recipes;
       // api ที่ส่งมา ข้อมูลอยู่ใน  data > recipes
     } catch (error) {
-      alert(error);
+      alert(
+        '🚫 API limit of 50 calls per day reached. Please try again later 😁'
+      );
     }
   }
 }

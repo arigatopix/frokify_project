@@ -2,9 +2,11 @@ import Search from './models/Search';
 // ไม่มี { Search } เพราะ export default
 import Recipe from './models/Recipe';
 import List from './models/List';
+import Likes from './models/Likes';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import * as listView from './views/listView';
+import * as likesView from './views/likesView';
 import { elements, renderLoader, clearLoader } from './views/base';
 
 const state = {
@@ -86,7 +88,7 @@ elements.searchResultPages.addEventListener('click', e => {
   }
 });
 
-// -----------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 
 /**
  * ! RECIPE CONTROLLER
@@ -124,10 +126,11 @@ const controlRecipe = async () => {
       state.recipe.calcTime();
       state.recipe.calcServings();
 
-      // Render recipe
+      // Render recipe and render likes
       clearLoader();
-      recipeView.renderRecipe(state.recipe);
+      recipeView.renderRecipe(state.recipe, state.likes.isLiked(id));
     } catch (error) {
+      console.log(error);
       alert('Error processing recipe!');
     }
   }
@@ -163,6 +166,46 @@ const controlList = () => {
 /**
  * ! LIKE CONTROLLER
  */
+
+//  ! TESTING เพื่อให้ renderRecipe เห็น like
+state.likes = new Likes();
+
+const controlLike = () => {
+  // Init likes state
+  if (!state.likes) state.likes = new Likes();
+  const currentID = state.recipe.id;
+
+  // * User has NOT yet liked current recipe
+  if (!state.likes.isLiked(currentID)) {
+    // Add like to the state
+    const newLike = state.likes.addLike(
+      currentID,
+      state.recipe.title,
+      state.recipe.author,
+      state.recipe.img
+    );
+
+    // Toggle the like button
+    likesView.toggleLikeBtn(true);
+
+    // Add like to UI list
+    likesView.renderLike(newLike);
+    console.log(state.likes);
+
+    // * User HAS liked current recipe
+  } else {
+    // Remove like to the state
+    state.likes.deleteLike(currentID);
+
+    // Toggle the like button
+    likesView.toggleLikeBtn(false);
+
+    // Remove like from UI list
+    likesView.deleteLike(currentID);
+    console.log(state.likes);
+  }
+  likesView.toggleLikeMenu(state.likes.getNumLikes());
+};
 
 //  Handle delete and update list item events
 elements.shopping.addEventListener('click', e => {
@@ -203,7 +246,12 @@ elements.recipe.addEventListener('click', e => {
     recipeView.updateServingsIngredients(state.recipe);
   } else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
     // เลือกทั้งกดทีปุ่่ม และกดที่ child
+
+    // Add ingredient to shopping list
     controlList();
+  } else if (e.target.matches('.recipe__love, .recipe__love *')) {
+    // Like controller
+    controlLike();
   }
 });
 
